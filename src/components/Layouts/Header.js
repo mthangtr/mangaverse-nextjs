@@ -1,4 +1,5 @@
 import { AppBar, Toolbar, Typography, IconButton, MenuItem, TextField, Button, Box } from "@mui/material";
+import Link from 'next/link'
 import MenuIcon from '@mui/icons-material/Menu';
 
 function Header() {
@@ -8,9 +9,11 @@ function Header() {
                 <IconButton edge="start" color="inherit" aria-label="menu">
                     <MenuIcon />
                 </IconButton>
-                <Typography variant="h5">
-                    <a className="select-none">MangaVerse</a>
-                </Typography>
+                <Link href="/">
+                    <Typography variant="h5">
+                        <p className="select-none">MangaVerse</p>
+                    </Typography>
+                </Link>
                 <MenuItem>Category</MenuItem>
                 <MenuItem>Ranking</MenuItem>
                 <MenuItem>Favourite</MenuItem>
