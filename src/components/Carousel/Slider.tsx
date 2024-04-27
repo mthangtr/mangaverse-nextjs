@@ -1,12 +1,7 @@
-import React from "react";
-import axios from "axios";
+"use client";
 import dynamic from "next/dynamic";
-
 import { Manga } from "@/types/mangaTypes";
-import { useEffect, useState } from "react";
-
 import MangaCard from "@/components/MangaCard";
-
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 var $ = require("jquery");
@@ -18,26 +13,7 @@ const OwlCarousel = dynamic(() => import("react-owl-carousel"), {
   ssr: false,
 });
 
-function Slider() {
-  const [data, setData] = useState<Manga[]>([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/manga/service/home/top12/most-liked")
-      .then((res) => {
-        if (res.data) {
-          setData(res.data);
-        } else {
-          console.error("No data available", res.data);
-          setData([]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setData([]);
-      });
-  }, []);
-
+function Slider({ data }: { data: Manga[] } = { data: [] }) {
   return (
     <div className="max-w-4xl flex flex-col justify-center items-center">
       <OwlCarousel
