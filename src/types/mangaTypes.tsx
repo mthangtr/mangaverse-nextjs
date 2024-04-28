@@ -10,6 +10,7 @@ export interface Manga {
   likeCount?: number;
   viewCount?: number;
   description?: string;
+  releaseDate?: string;
   categories?: Category[];
   chapters?: Chapter[];
 }

@@ -30,7 +30,7 @@ export default function RootLayout({
         <Header />
         <Container maxWidth="lg">
           <div className="flex">
-            <main className="">{children}</main>
+            <main className="lg:max-w-4xl">{children}</main>
             <Sidebar />
           </div>
         </Container>

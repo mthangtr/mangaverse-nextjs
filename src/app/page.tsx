@@ -1,19 +1,24 @@
-"use client";
-import React from "react";
-import Carousel from "@/components/Carousel/Carousel";
-import HomeContent from "@/components/HomeContent/HomeContent";
+import HomeDefault from "@/components/HomeDefault";
+import axios from "axios";
+import { Manga } from "@/types/mangaTypes";
 
-function Home() {
+const getCarouselData = async () => {
+  try {
+    const response = await axios.get<Manga[]>(
+      "http://localhost:8080/api/manga/service/home/top12/most-liked"
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch carousel data:", error);
+    throw error;
+  }
+};
+
+async function Home({ pageParam }: { pageParam: number }) {
+  const carouselData = await getCarouselData();
   return (
-    <div className="min-h-screen">
-      <div className="py-4 flex flex-col justify-center items-center">
-        <h1 className="text-2xl font-bold text-center pb-4">Hot Manga</h1>
-        <Carousel />
-      </div>
-      <div className="pb-4 flex flex-col justify-center items-center">
-        <h1 className="text-2xl font-bold pb-4 text-center">Daily Updates</h1>
-        <HomeContent />
-      </div>
+    <div>
+      <HomeDefault carouselData={carouselData} />
     </div>
   );
 }
