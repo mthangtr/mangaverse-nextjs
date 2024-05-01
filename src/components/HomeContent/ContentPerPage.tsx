@@ -1,13 +1,13 @@
 "use client";
 import axios from "axios";
-import { Manga } from "@/types/mangaTypes";
+import { Manga } from "@/types/Global.d";
 import MangaCard from "@/components/MangaCard";
 import { Pagination } from "@mui/material";
 import { useState, useEffect } from "react";
 
 const ContentPerPage = () => {
   const [data, setData] = useState<Manga[]>([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
 
   useEffect(() => {
@@ -22,14 +22,18 @@ const ContentPerPage = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    const getPageNum = async () => {
-      const { data } = await axios.get<number>(
-        `http://localhost:8080/api/manga/total-manga-number`
-      );
-      setTotalPage(Math.ceil(data / 8));
+    const getTotalPage = async () => {
+      try {
+        const { data } = await axios.get<number>(
+          `http://localhost:8080/api/manga/total-manga-number`
+        );
+        setTotalPage(Math.ceil(data / 8));
+      } catch (error) {
+        console.error("Failed to fetch total page number:", error);
+      }
     };
 
-    getPageNum();
+    getTotalPage();
   }, []);
 
   const handlePageChange = (

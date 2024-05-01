@@ -1,19 +1,14 @@
 "use client";
 import dynamic from "next/dynamic";
-import { Manga } from "@/types/mangaTypes";
+import { Manga } from "@/types/Global.d";
 import MangaCard from "@/components/MangaCard";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
-var $ = require("jquery");
-if (typeof window !== "undefined") {
-  window.$ = window.jQuery = require("jquery");
-}
-
 const OwlCarousel = dynamic(() => import("react-owl-carousel"), {
   ssr: false,
 });
 
-function Slider({ data }: { data: Manga[] } = { data: [] }) {
+function Carousel({ data }: { data: Manga[] } = { data: [] }) {
   return (
     <div className="max-w-4xl flex flex-col justify-center items-center">
       <OwlCarousel
@@ -37,4 +32,4 @@ function Slider({ data }: { data: Manga[] } = { data: [] }) {
   );
 }
 
-export default Slider;
+export default Carousel;

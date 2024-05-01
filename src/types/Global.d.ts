@@ -1,6 +1,3 @@
-import { Category } from "./categoryTypes";
-import { Chapter } from "./chapterTypes";
-
 export interface Manga {
   id: number;
   title: string;
@@ -10,7 +7,18 @@ export interface Manga {
   likeCount?: number;
   viewCount?: number;
   description?: string;
-  releaseDate?: string;
-  categories?: Category[];
+  releaseDate?: Date | string;
+  categories?: string[];
   chapters?: Chapter[];
+}
+
+interface Chapter {
+  id: number;
+  title: string;
+  releaseDate: Date | string;
+}
+
+export interface Window {
+  $: JQueryStatic;
+  jQuery: JQueryStatic;
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Manga } from "@/types/mangaTypes";
+import { Manga } from "@/types/Global.d";
 import { Visibility, ThumbUp, Comment } from "@mui/icons-material";
 
 function MangaCard({ data }: { data: Manga }) {
@@ -18,6 +18,27 @@ function MangaCard({ data }: { data: Manga }) {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-zA-Z0-9]/g, "-")
     .toLowerCase();
+
+  function timeAgo(releaseDate: any) {
+    const currentDate = new Date();
+    const releaseDateObj = new Date(releaseDate);
+    const timeDiff = currentDate.getTime() - releaseDateObj.getTime();
+
+    const hoursAgo = Math.floor(timeDiff / (1000 * 60 * 60));
+    const daysAgo = Math.floor(hoursAgo / 24);
+
+    if (hoursAgo < 24) {
+      return `${hoursAgo} hours ago`;
+    } else if (daysAgo < 7) {
+      return `${daysAgo} days ago`;
+    } else if (daysAgo < 30) {
+      return `${daysAgo} days ago`;
+    } else if (daysAgo < 365) {
+      return `${Math.floor(daysAgo / 30)} months ago`;
+    } else {
+      return `${Math.floor(daysAgo / 365)} years ago`;
+    }
+  }
 
   return (
     <div className="border max-w-64 rounded-md">
@@ -58,7 +79,7 @@ function MangaCard({ data }: { data: Manga }) {
               <div key={chapter.id} className="flex justify-between">
                 <div className="text-xs font-medium">{chapter.title}</div>
                 <span className="text-xs font-medium text-gray-600">
-                  7 hours ago
+                  {timeAgo(chapter.releaseDate)}
                 </span>
               </div>
             ))}

@@ -1,12 +1,17 @@
 import axios from "axios";
 import MangaDetail from "@/components/MangaDetail/MangaDetail";
-import { Manga } from "@/types/mangaTypes";
+import { Manga } from "@/types/Global";
 
-const MangaDetailGET = async ({ params }: { params: any }) => {
+async function MangaDetailGET(mangaId: number) {
   const { data } = await axios.get<Manga>(
-    `http://localhost:8080/api/manga/service/detail/${params.id}`
+    `http://localhost:8080/api/manga/service/detail/${mangaId}`
   );
 
+  return data;
+}
+
+const Detail = async ({ params }: { params: any }) => {
+  const data = await MangaDetailGET(params.id);
   return (
     <div>
       <MangaDetail data={data} />
@@ -14,4 +19,4 @@ const MangaDetailGET = async ({ params }: { params: any }) => {
   );
 };
 
-export default MangaDetail;
+export default Detail;
