@@ -12,7 +12,7 @@ export interface Manga {
   chapters?: Chapter[];
 }
 
-interface Chapter {
+export interface Chapter {
   id: number;
   title: string;
   releaseDate: Date | string;

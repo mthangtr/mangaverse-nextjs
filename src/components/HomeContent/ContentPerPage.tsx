@@ -13,7 +13,7 @@ const ContentPerPage = () => {
   useEffect(() => {
     const getMangaPerPage = async (currentPage: number) => {
       const { data } = await axios.get<Manga[]>(
-        `http://localhost:8080/api/manga/home?page=${currentPage - 1}`
+        `http://localhost:8080/api/manga/home?page=${currentPage}`
       );
       setData(data);
     };

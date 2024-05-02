@@ -1,5 +1,6 @@
 "use client";
-import { Manga } from "@/types/Global";
+import { Manga, Chapter } from "@/types/Global";
+import axios from "axios";
 import {
   Visibility,
   ThumbUp,
@@ -10,10 +11,18 @@ import {
   MenuBook,
 } from "@mui/icons-material";
 import { Button } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function MangaDetail({ data }: { data: Manga }) {
+function MangaDetail({
+  data,
+  chaptersInit,
+}: {
+  data: Manga;
+  chaptersInit: Chapter[];
+}) {
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [chapters, setChapters] = useState<Chapter[]>([...chaptersInit]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const formatCount = (count?: number) => {
     if (!count) return "0";
@@ -69,6 +78,26 @@ function MangaDetail({ data }: { data: Manga }) {
         </>
       );
     }
+  };
+
+  const fetchChapters = async (mangaId: number, page: number) => {
+    if (page === 1) return;
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/manga/service/detail/${mangaId}/chapters?page=${page}`
+      );
+      setChapters((prevChapters) => [...prevChapters, ...response.data]);
+    } catch (error) {
+      console.error("Failed to fetch chapters:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchChapters(data.id, currentPage);
+  }, [data.id, currentPage]);
+
+  const handleShowMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
   };
 
   return (
@@ -140,14 +169,21 @@ function MangaDetail({ data }: { data: Manga }) {
         </div>
         <div className="border-b-2"></div>
         <div>
-          {data.chapters?.map((chapter) => (
-            <div className="flex justify-between hover:bg-slate-100 rounded-md p-2">
-              <h1 className="text-md">{chapter.title}</h1>
-              <p className="text-sm text-gray-600">
-                {timeAgo(chapter.releaseDate)}
-              </p>
-            </div>
-          ))}
+          {chapters &&
+            chapters.map((chapter, index) => (
+              <div
+                key={index}
+                className="flex justify-between hover:bg-slate-100 rounded-md p-2"
+              >
+                <h1 className="text-md">{chapter.title}</h1>
+                <p className="text-sm text-gray-600">
+                  {timeAgo(chapter.releaseDate)}
+                </p>
+              </div>
+            ))}
+          <Button onClick={handleShowMore} color="primary">
+            Show More
+          </Button>
         </div>
       </div>
     </div>
