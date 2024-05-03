@@ -28,7 +28,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Header />
         <Container maxWidth="lg">
-          <main>{children}</main>
+          <main className="min-h-screen">{children}</main>
         </Container>
         <Footer />
       </body>

@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 function Header() {
     return (
-        <AppBar position="static" color="transparent">
+        <AppBar position="static" color="default">
             <Toolbar>
                 <IconButton edge="start" color="inherit" aria-label="menu">
                     <MenuIcon />

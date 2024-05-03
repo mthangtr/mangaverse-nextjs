@@ -8,7 +8,7 @@ export default function HomeContent({
   carouselData: Manga[];
 }) {
   return (
-    <div>
+    <div className="bg-white">
       <div className="pt-4 flex flex-col justify-center items-center">
         <h1 className="text-2xl font-bold text-center pb-4">Hot Manga</h1>
         <Carousel data={carouselData} />

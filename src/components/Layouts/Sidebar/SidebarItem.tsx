@@ -1,6 +1,7 @@
 import { Visibility } from "@mui/icons-material";
 import { Manga } from "@/types/Global.d";
 import Link from "next/link";
+import { titleUrlFormat } from "@/utils/format";
 
 interface SidebarItemProps {
   data: Manga;
@@ -31,17 +32,13 @@ function SidebarItem({ data }: SidebarItemProps) {
     }
   }
 
-  const titleUrlFormat = data.title
-    .normalize("NFD")
-    .replace(/đ/g, "d")
-    .replace(/Đ/g, "D")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-zA-Z0-9]/g, "-")
-    .toLowerCase();
-
   return (
     <div className="flex space-x-3 p-2 m-2">
-      <Link href={`/detail/${encodeURIComponent(titleUrlFormat)}/${data.id}`}>
+      <Link
+        href={`/detail/${encodeURIComponent(titleUrlFormat(data.title))}/${
+          data.id
+        }`}
+      >
         <img
           src={data.thumbnail}
           alt={data.title}
@@ -49,7 +46,11 @@ function SidebarItem({ data }: SidebarItemProps) {
         />
       </Link>
       <div className="flex flex-col justify-center">
-        <Link href={`/detail/${encodeURIComponent(titleUrlFormat)}/${data.id}`}>
+        <Link
+          href={`/detail/${encodeURIComponent(titleUrlFormat(data.title))}/${
+            data.id
+          }`}
+        >
           <h2 className="text-sm font-semibold truncate w-40">{data.title}</h2>
         </Link>
         <a className="text-xs ">
@@ -59,7 +60,15 @@ function SidebarItem({ data }: SidebarItemProps) {
         <ul className="text-xs">
           {data.chapters?.slice(0, 3).map((chapter) => (
             <div key={chapter.id} className="flex justify-between">
-              <li>{chapter.title}</li>
+              <Link
+                href={`/views/${encodeURIComponent(
+                  titleUrlFormat(data.title)
+                )}/${data.id}/${chapter.id}/${encodeURIComponent(
+                  titleUrlFormat(chapter.title)
+                )}`}
+              >
+                <li className="hover:underline">{chapter.title}</li>
+              </Link>
               <span>{timeAgo(chapter.releaseDate)}</span>
             </div>
           ))}

@@ -25,12 +25,26 @@ async function moreChapterGET({
   return data;
 }
 
+async function totalChapterGET(mangaId: number) {
+  const { data } = await axios.get<number>(
+    `http://localhost:8080/api/manga/total-chapter-number/${mangaId}`
+  );
+
+  return data;
+}
+
 const Detail = async ({ params }: { params: any }) => {
   const data = await MangaDetailGET(params.id);
   const chapter = await moreChapterGET({ mangaId: params.id, page: 1 });
+  const totalChapter: number = await totalChapterGET(params.id);
+
   return (
     <SidebarLayout>
-      <MangaDetail data={data} chaptersInit={chapter} />
+      <MangaDetail
+        data={data}
+        chaptersInit={chapter}
+        totalChapter={totalChapter}
+      />
     </SidebarLayout>
   );
 };

@@ -6,14 +6,18 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: gainsboroy;
-  padding: 10px 15px;
+  background-color: rgb(203, 205, 207);
+  padding: 8px 15px;
   cursor: pointer;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   font-weight: bold;
   font-size: 20px;
   color: #000;
+}
+
+.custom-nav:active {
+  background-color: #f0f0f0;
 }
 
 .custom-nav.prev {

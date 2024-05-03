@@ -10,21 +10,26 @@ import {
   Info,
   MenuBook,
 } from "@mui/icons-material";
+import Link from "next/link";
+import { formatCount, titleUrlFormat } from "@/utils/format";
+import timeAgo from "@/utils/timeAgo";
 import { Button } from "@mui/material";
 import { useState, useEffect } from "react";
-import { formatCount } from "@/utils/format";
-import timeAgo from "@/utils/timeAgo";
 
 export default function MangaDetail({
   data,
   chaptersInit,
+  totalChapter,
 }: {
   data: Manga;
   chaptersInit: Chapter[];
+  totalChapter: number;
 }) {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [chapters, setChapters] = useState<Chapter[]>([...chaptersInit]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  console.log(totalChapter);
 
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
@@ -68,9 +73,10 @@ export default function MangaDetail({
 
   useEffect(() => {
     fetchChapters(data.id, currentPage);
-  }, [data.id, currentPage]);
+  }, [currentPage]);
 
   const handleShowMore = () => {
+    if (chapters.length >= totalChapter) return;
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
@@ -145,19 +151,29 @@ export default function MangaDetail({
         <div>
           {chapters &&
             chapters.map((chapter, index) => (
-              <div
-                key={index}
-                className="flex justify-between hover:bg-slate-100 rounded-md p-2"
+              <Link
+                href={`/views/${encodeURIComponent(
+                  titleUrlFormat(data.title)
+                )}/${data.id}/${chapter.id}/${encodeURIComponent(
+                  titleUrlFormat(chapter.title)
+                )}`}
               >
-                <h1 className="text-md">{chapter.title}</h1>
-                <p className="text-sm text-gray-600">
-                  {timeAgo(chapter.releaseDate)}
-                </p>
-              </div>
+                <div
+                  key={index}
+                  className="flex justify-between hover:bg-slate-100 rounded-md p-2"
+                >
+                  <h1 className="text-md">{chapter.title}</h1>
+                  <p className="text-sm text-gray-600">
+                    {timeAgo(chapter.releaseDate)}
+                  </p>
+                </div>
+              </Link>
             ))}
-          <Button onClick={handleShowMore} color="primary">
-            Show More
-          </Button>
+          {chapters.length < totalChapter && (
+            <Button onClick={handleShowMore} color="primary">
+              Show More
+            </Button>
+          )}
         </div>
       </div>
     </div>
