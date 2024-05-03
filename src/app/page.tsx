@@ -1,7 +1,7 @@
-import ContentPerPage from "@/components/HomeContent/ContentPerPage";
-import Carousel from "@/components/Carousel/Carousel";
 import axios from "axios";
 import { Manga } from "@/types/Global.d";
+import HomeContent from "@/components/Pages/HomeContent";
+import SidebarLayout from "./layout/SidebarLayout";
 
 const getCarouselData = async () => {
   try {
@@ -15,26 +15,11 @@ const getCarouselData = async () => {
   }
 };
 
-const Home = async () => {
+export default async function Home() {
   const carouselData = await getCarouselData();
   return (
-    <div>
-      <div>
-        <div className="min-h-screen">
-          <div className="py-4 flex flex-col justify-center items-center">
-            <h1 className="text-2xl font-bold text-center pb-4">Hot Manga</h1>
-            <Carousel data={carouselData} />
-          </div>
-          <div className="pb-4 flex flex-col justify-center items-center">
-            <h1 className="text-2xl font-bold pb-4 text-center">
-              Daily Updates
-            </h1>
-            <ContentPerPage />
-          </div>
-        </div>
-      </div>
-    </div>
+    <SidebarLayout>
+      <HomeContent carouselData={carouselData} />
+    </SidebarLayout>
   );
-};
-
-export default Home;
+}

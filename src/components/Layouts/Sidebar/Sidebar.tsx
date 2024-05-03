@@ -1,28 +1,16 @@
-"use client";
 import SidebarItem from "./SidebarItem";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Manga } from "@/types/mangaTypes";
+import { Manga } from "@/types/Global";
 
-function Sidebar() {
-  const [data, setData] = useState<Manga[]>([]);
+const SidebarData = async () => {
+  const res = await axios.get<Manga[]>(
+    "http://localhost:8080/api/manga/service/sidebar/top12/most-viewed"
+  );
+  return res.data;
+};
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/manga/service/sidebar/top12/most-viewed")
-      .then((res) => {
-        if (res.data) {
-          setData(res.data);
-        } else {
-          console.error("No data available", res.data);
-          setData([]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setData([]);
-      });
-  }, []);
+export default async function Sidebar() {
+  const data = await SidebarData();
 
   return (
     <div>
@@ -33,5 +21,3 @@ function Sidebar() {
     </div>
   );
 }
-
-export default Sidebar;

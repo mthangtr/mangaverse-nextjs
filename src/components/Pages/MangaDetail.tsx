@@ -12,8 +12,10 @@ import {
 } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { useState, useEffect } from "react";
+import { formatCount } from "@/utils/format";
+import timeAgo from "@/utils/timeAgo";
 
-function MangaDetail({
+export default function MangaDetail({
   data,
   chaptersInit,
 }: {
@@ -23,34 +25,6 @@ function MangaDetail({
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [chapters, setChapters] = useState<Chapter[]>([...chaptersInit]);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const formatCount = (count?: number) => {
-    if (!count) return "0";
-    if (count >= 1000000) return `${(count / 1000000).toFixed(0)}M`;
-    if (count >= 1000) return `${(count / 1000).toFixed(0)}k`;
-    return count.toString();
-  };
-
-  function timeAgo(releaseDate: any) {
-    const currentDate = new Date();
-    const releaseDateObj = new Date(releaseDate);
-    const timeDiff = currentDate.getTime() - releaseDateObj.getTime();
-
-    const hoursAgo = Math.floor(timeDiff / (1000 * 60 * 60));
-    const daysAgo = Math.floor(hoursAgo / 24);
-
-    if (hoursAgo < 24) {
-      return `${hoursAgo} hours ago`;
-    } else if (daysAgo < 7) {
-      return `${daysAgo} days ago`;
-    } else if (daysAgo < 30) {
-      return `${daysAgo} days ago`;
-    } else if (daysAgo < 365) {
-      return `${Math.floor(daysAgo / 30)} months ago`;
-    } else {
-      return `${Math.floor(daysAgo / 365)} years ago`;
-    }
-  }
 
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
@@ -101,7 +75,7 @@ function MangaDetail({
   };
 
   return (
-    <div className="my-4 max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
+    <div className="my-4 max-w-full mx-auto p-4 bg-white shadow-lg rounded-lg">
       <div className="flex flex-row">
         <div className="flex-none w-72 h-96 rounded-lg overflow-hidden">
           <img
@@ -189,5 +163,3 @@ function MangaDetail({
     </div>
   );
 }
-
-export default MangaDetail;

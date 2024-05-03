@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import { Container } from "@mui/material";
 
 import Footer from "@/components/Layouts/Footer";
-import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 
 const Header = dynamic(() => import("@/components/Layouts/Header"), {
   ssr: false,
@@ -29,10 +28,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Header />
         <Container maxWidth="lg">
-          <div className="flex">
-            <main className="lg:max-w-4xl">{children}</main>
-            <Sidebar />
-          </div>
+          <main>{children}</main>
         </Container>
         <Footer />
       </body>

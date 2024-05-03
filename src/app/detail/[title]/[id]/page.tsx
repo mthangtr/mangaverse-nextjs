@@ -1,6 +1,7 @@
 import axios from "axios";
-import MangaDetail from "@/components/MangaDetail/MangaDetail";
+import MangaDetail from "@/components/Pages/MangaDetail";
 import { Manga, Chapter } from "@/types/Global";
+import SidebarLayout from "@/app/layout/SidebarLayout";
 
 async function MangaDetailGET(mangaId: number) {
   const { data } = await axios.get<Manga>(
@@ -28,9 +29,9 @@ const Detail = async ({ params }: { params: any }) => {
   const data = await MangaDetailGET(params.id);
   const chapter = await moreChapterGET({ mangaId: params.id, page: 1 });
   return (
-    <div>
+    <SidebarLayout>
       <MangaDetail data={data} chaptersInit={chapter} />
-    </div>
+    </SidebarLayout>
   );
 };
 

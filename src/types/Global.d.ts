@@ -18,6 +18,12 @@ export interface Chapter {
   releaseDate: Date | string;
 }
 
+export interface Page {
+  id: number;
+  page_number: number;
+  image_url: string;
+}
+
 export interface Window {
   $: JQueryStatic;
   jQuery: JQueryStatic;
