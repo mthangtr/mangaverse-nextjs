@@ -22,7 +22,7 @@ export interface Chapter {
 export interface ChapterDetail {
   chapterId: number;
   mangaId: number;
-  chapterTitle?: string;
+  chapterTitle: string;
   releaseDate: Date | string;
   page?: Page[];
   mangaTitle: string;

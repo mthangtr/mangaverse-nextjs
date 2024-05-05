@@ -8,6 +8,16 @@ import { formatDate } from "@/utils/format";
 import ChapterContent from "./ChapterContent";
 import { titleUrlFormat } from "@/utils/format";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+
+async function getChapterDetail({ chapterId }: { chapterId: number }) {
+  const { data } = await axios.get(
+    `http://localhost:8080/api/chapter/service/detail/${chapterId}`
+  );
+
+  return data;
+}
 
 export default function ViewChapter({
   InitData,
@@ -16,11 +26,37 @@ export default function ViewChapter({
   InitData: ChapterDetail;
   chapterList: Chapter[];
 }) {
-  // href={`/views/${encodeURIComponent(
-  //   titleUrlFormat(InitData.mangaTitle)
-  // )}/${InitData.mangaId}/${
-  //   InitData.chapterId
-  // }/${encodeURIComponent(titleUrlFormat(chapter.title))}`}
+  const [data, setData] = useState<ChapterDetail>(InitData);
+  const [selectedChapterId, setSelectedChapterId] = useState<number>(
+    data.chapterId
+  );
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (selectedChapterId !== data.chapterId) {
+      getChapterDetail({ chapterId: selectedChapterId })
+        .then((newData) => {
+          if (newData.chapterId !== data.chapterId) {
+            setData(newData);
+            router.replace(
+              `/views/${encodeURIComponent(
+                titleUrlFormat(newData.mangaTitle)
+              )}/${newData.mangaId}/${newData.chapterId}/${encodeURIComponent(
+                titleUrlFormat(newData.chapterTitle)
+              )}`
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to fetch chapter details:", error);
+        });
+    }
+  }, [selectedChapterId, data.chapterId, router]);
+
+  const handleChapterChange = (id: number) => {
+    setSelectedChapterId(id);
+  };
 
   return (
     <div className="mt-4">
@@ -33,28 +69,28 @@ export default function ViewChapter({
             {" / "}
             <Link
               href={`/detail/${encodeURIComponent(
-                titleUrlFormat(String(InitData.mangaTitle))
-              )}/${InitData.mangaId}`}
+                titleUrlFormat(String(data.mangaTitle))
+              )}/${data.mangaId}`}
               className="px-2 text-sm font-medium truncate max-w-96"
             >
-              {InitData.mangaTitle}
+              {data.mangaTitle}
             </Link>{" "}
             {" / "}
             <Link
               href={`/views/${encodeURIComponent(
-                titleUrlFormat(String(InitData.mangaTitle))
-              )}/${InitData.mangaId}/${InitData.chapterId}/${encodeURIComponent(
-                titleUrlFormat(String(InitData.chapterTitle))
+                titleUrlFormat(String(data.mangaTitle))
+              )}/${data.mangaId}/${data.chapterId}/${encodeURIComponent(
+                titleUrlFormat(String(data.chapterTitle))
               )}`}
               className="px-2 text-sm font-medium"
             >
-              {InitData.chapterTitle}
+              {data.chapterTitle}
             </Link>
           </header>
           <div className="flex item-center pt-2">
             <p>
-              {InitData.mangaTitle} - {InitData.chapterTitle} (
-              {formatDate(String(InitData.releaseDate))})
+              {data.mangaTitle} - {data.chapterTitle} (
+              {formatDate(String(data.releaseDate))})
             </p>
           </div>
           <div className="pt-2">
@@ -86,7 +122,10 @@ export default function ViewChapter({
                 labelId="chapter-select-label"
                 id="chapter-select"
                 label="Chapter"
-                defaultValue={InitData.chapterTitle}
+                value={selectedChapterId}
+                onChange={(event) =>
+                  handleChapterChange(Number(event.target.value))
+                }
                 MenuProps={{
                   PaperProps: {
                     style: {
@@ -97,22 +136,29 @@ export default function ViewChapter({
                 }}
               >
                 {chapterList.map((chapter) => (
-                  <MenuItem key={chapter.id} value={chapter.title}>
+                  <MenuItem key={chapter.id} value={chapter.id}>
                     {chapter.title}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
+
             <div className="flex justify-center pt-2">
               <Button
                 variant="outlined"
                 className="text-black border-black mx-1 hover:border-black"
+                disabled={
+                  data.chapterId === chapterList[chapterList.length - 1].id
+                }
+                onClick={() => handleChapterChange(data.chapterId - 1)}
               >
                 <ArrowBackIos />
               </Button>
               <Button
                 variant="outlined"
                 className="text-black border-black mx-1 hover:border-black"
+                disabled={data.chapterId === chapterList[0].id}
+                onClick={() => handleChapterChange(data.chapterId + 1)}
               >
                 <ArrowForwardIos />
               </Button>
@@ -120,7 +166,7 @@ export default function ViewChapter({
           </div>
         </div>
       </div>
-      <ChapterContent chapterId={InitData.chapterId} />
+      <ChapterContent chapterId={data.chapterId} />
     </div>
   );
 }

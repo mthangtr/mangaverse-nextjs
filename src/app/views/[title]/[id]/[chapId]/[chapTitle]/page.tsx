@@ -13,7 +13,7 @@ async function getInitialData({ chapId }: { chapId: number }) {
   return data;
 }
 
-async function getChaptersByMangaId({ mangaId }: { mangaId: number }) {
+async function getListChaptersByMangaId({ mangaId }: { mangaId: number }) {
   const { data } = await axios.get(
     `http://localhost:8080/api/chapter/service/all-chapter/${mangaId}`
   );
@@ -23,6 +23,6 @@ async function getChaptersByMangaId({ mangaId }: { mangaId: number }) {
 export default async function View({ params }: { params: ViewParams }) {
   const { chapId, id } = params;
   const chapterData = await getInitialData({ chapId });
-  const chapterList = await getChaptersByMangaId({ mangaId: id });
+  const chapterList = await getListChaptersByMangaId({ mangaId: id });
   return <ViewChapter InitData={chapterData} chapterList={chapterList} />;
 }

@@ -1,16 +1,20 @@
 "use client";
+import dynamic from "next/dynamic";
+import { useState } from "react";
 import { Manga } from "@/types/Global.d";
 import MangaCard from "@/components/MangaCard";
-import { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
+
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import "./Carousel.css";
-import dynamic from "next/dynamic";
 const ReactOwlCarousel = dynamic(() => import("react-owl-carousel"), {
   ssr: false,
   loading: () => (
     <div className="min-h-96 flex justify-center items-center">
-      <p>Loading...</p>
+      <p>
+        <CircularProgress />
+      </p>
     </div>
   ),
 });
