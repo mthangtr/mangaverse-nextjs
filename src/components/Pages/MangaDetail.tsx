@@ -29,8 +29,6 @@ export default function MangaDetail({
   const [chapters, setChapters] = useState<Chapter[]>([...chaptersInit]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  console.log(totalChapter);
-
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
@@ -63,7 +61,7 @@ export default function MangaDetail({
     if (page === 1) return;
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/manga/service/detail/${mangaId}/chapters?page=${page}`
+        `http://localhost:8080/api/chapter/service/detail/${mangaId}/chapters?page=${page}`
       );
       setChapters((prevChapters) => [...prevChapters, ...response.data]);
     } catch (error) {
@@ -124,10 +122,26 @@ export default function MangaDetail({
               </Button>
             </div>
             <div>
-              <Button variant="outlined">Read first</Button>
-              <Button className="ml-4" variant="outlined">
-                Read Latest
-              </Button>
+              <Link
+                href={`/views/${encodeURIComponent(
+                  titleUrlFormat(data.title)
+                )}/${data.id}/${chapters[0].id}/${encodeURIComponent(
+                  titleUrlFormat(chapters[0].title)
+                )}`}
+              >
+                <Button variant="outlined">Read first</Button>
+              </Link>
+              <Link
+                href={`/views/${encodeURIComponent(
+                  titleUrlFormat(data.title)
+                )}/${data.id}/${chapters[0].id}/${encodeURIComponent(
+                  titleUrlFormat(chapters[0].title)
+                )}`}
+              >
+                <Button className="ml-4" variant="outlined">
+                  Read Latest
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -150,7 +164,7 @@ export default function MangaDetail({
         <div className="border-b-2"></div>
         <div>
           {chapters &&
-            chapters.map((chapter, index) => (
+            chapters.map((chapter) => (
               <Link
                 href={`/views/${encodeURIComponent(
                   titleUrlFormat(data.title)
@@ -159,7 +173,7 @@ export default function MangaDetail({
                 )}`}
               >
                 <div
-                  key={index}
+                  key={chapter.id}
                   className="flex justify-between hover:bg-slate-100 rounded-md p-2"
                 >
                   <h1 className="text-md">{chapter.title}</h1>

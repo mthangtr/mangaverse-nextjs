@@ -5,12 +5,19 @@ import MangaCard from "@/components/MangaCard";
 import { Pagination } from "@mui/material";
 import { useState, useEffect } from "react";
 
-const ContentPerPage = () => {
-  const [data, setData] = useState<Manga[]>([]);
+export default function ContentPerPage({
+  initialPaginationData,
+}: {
+  initialPaginationData: Manga[];
+}) {
+  const [data, setData] = useState<Manga[]>(initialPaginationData);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
 
   useEffect(() => {
+    if (currentPage === 1 && data === initialPaginationData) {
+      return;
+    }
     const getMangaPerPage = async (currentPage: number) => {
       const { data } = await axios.get<Manga[]>(
         `http://localhost:8080/api/manga/home?page=${currentPage}`
@@ -65,6 +72,4 @@ const ContentPerPage = () => {
       </div>
     </div>
   );
-};
-
-export default ContentPerPage;
+}

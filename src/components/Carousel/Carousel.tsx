@@ -1,18 +1,25 @@
 "use client";
-import dynamic from "next/dynamic";
 import { Manga } from "@/types/Global.d";
 import MangaCard from "@/components/MangaCard";
+import { useEffect, useState } from "react";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import "./Carousel.css";
-const OwlCarousel = dynamic(() => import("react-owl-carousel"), {
+import dynamic from "next/dynamic";
+const ReactOwlCarousel = dynamic(() => import("react-owl-carousel"), {
   ssr: false,
+  loading: () => (
+    <div className="min-h-96 flex justify-center items-center">
+      <p>Loading...</p>
+    </div>
+  ),
 });
 
-function Carousel({ data }: { data: Manga[] }) {
+export default function Carousel({ carouselData }: { carouselData: Manga[] }) {
+  const [data, setData] = useState<Manga[]>(carouselData);
   return (
     <div className="max-w-full flex flex-col justify-center items-center">
-      <OwlCarousel
+      <ReactOwlCarousel
         className="owl-theme custom-carousel"
         loop={true}
         margin={10}
@@ -31,9 +38,7 @@ function Carousel({ data }: { data: Manga[] }) {
         {data.map((item) => (
           <MangaCard key={item.id} data={item} />
         ))}
-      </OwlCarousel>
+      </ReactOwlCarousel>
     </div>
   );
 }
-
-export default Carousel;

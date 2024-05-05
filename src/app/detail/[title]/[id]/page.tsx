@@ -19,7 +19,7 @@ async function moreChapterGET({
   page: number;
 }) {
   const { data } = await axios.get<Chapter[]>(
-    `http://localhost:8080/api/manga/service/detail/${mangaId}/chapters?page=${page}`
+    `http://localhost:8080/api/chapter/service/detail/${mangaId}/chapters?page=${page}`
   );
 
   return data;
@@ -27,7 +27,7 @@ async function moreChapterGET({
 
 async function totalChapterGET(mangaId: number) {
   const { data } = await axios.get<number>(
-    `http://localhost:8080/api/manga/total-chapter-number/${mangaId}`
+    `http://localhost:8080/api/chapter/total-chapter-number/${mangaId}`
   );
 
   return data;

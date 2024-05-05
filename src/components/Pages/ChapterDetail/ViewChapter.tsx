@@ -1,9 +1,27 @@
+"use client";
 import Link from "next/link";
 import { Button } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { ChapterDetail, Chapter } from "@/types/Global";
+import { formatDate } from "@/utils/format";
+import ChapterContent from "./ChapterContent";
+import { titleUrlFormat } from "@/utils/format";
+import { useState, useEffect } from "react";
 
-export default function ViewChapter() {
+export default function ViewChapter({
+  InitData,
+  chapterList,
+}: {
+  InitData: ChapterDetail;
+  chapterList: Chapter[];
+}) {
+  // href={`/views/${encodeURIComponent(
+  //   titleUrlFormat(InitData.mangaTitle)
+  // )}/${InitData.mangaId}/${
+  //   InitData.chapterId
+  // }/${encodeURIComponent(titleUrlFormat(chapter.title))}`}
+
   return (
     <div className="mt-4">
       <div className="bg-zinc-100">
@@ -13,16 +31,31 @@ export default function ViewChapter() {
               Home
             </Link>
             {" / "}
-            <Link href={`/`} className="px-2 text-sm font-medium">
-              One Punch Man
+            <Link
+              href={`/detail/${encodeURIComponent(
+                titleUrlFormat(String(InitData.mangaTitle))
+              )}/${InitData.mangaId}`}
+              className="px-2 text-sm font-medium truncate max-w-96"
+            >
+              {InitData.mangaTitle}
             </Link>{" "}
             {" / "}
-            <Link href={`/`} className="px-2 text-sm font-medium">
-              Chapter 321
+            <Link
+              href={`/views/${encodeURIComponent(
+                titleUrlFormat(String(InitData.mangaTitle))
+              )}/${InitData.mangaId}/${InitData.chapterId}/${encodeURIComponent(
+                titleUrlFormat(String(InitData.chapterTitle))
+              )}`}
+              className="px-2 text-sm font-medium"
+            >
+              {InitData.chapterTitle}
             </Link>
           </header>
           <div className="flex item-center pt-2">
-            <p>One Punch Man - Chapter 321 (Updated at 01:06 02/05/2024)</p>
+            <p>
+              {InitData.mangaTitle} - {InitData.chapterTitle} (
+              {formatDate(String(InitData.releaseDate))})
+            </p>
           </div>
           <div className="pt-2">
             <a className="text-xs flex justify-center">
@@ -53,13 +86,21 @@ export default function ViewChapter() {
                 labelId="chapter-select-label"
                 id="chapter-select"
                 label="Chapter"
-                defaultValue="Chapter 321"
+                defaultValue={InitData.chapterTitle}
+                MenuProps={{
+                  PaperProps: {
+                    style: {
+                      maxHeight: 200,
+                      overflow: "auto",
+                    },
+                  },
+                }}
               >
-                <MenuItem value="Chapter 320">Chapter 320</MenuItem>
-                <MenuItem value="Chapter 321">Chapter 321</MenuItem>
-                <MenuItem value="Chapter 322">Chapter 322</MenuItem>
-                <MenuItem value="Chapter 323">Chapter 323</MenuItem>
-                <MenuItem value="Chapter 324">Chapter 324</MenuItem>
+                {chapterList.map((chapter) => (
+                  <MenuItem key={chapter.id} value={chapter.title}>
+                    {chapter.title}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
             <div className="flex justify-center pt-2">
@@ -79,6 +120,7 @@ export default function ViewChapter() {
           </div>
         </div>
       </div>
+      <ChapterContent chapterId={InitData.chapterId} />
     </div>
   );
 }

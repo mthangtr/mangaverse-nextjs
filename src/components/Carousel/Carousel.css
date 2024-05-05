@@ -7,9 +7,9 @@
   top: 50%;
   transform: translateY(-50%);
   background-color: rgb(203, 205, 207);
-  padding: 8px 15px;
+  padding: 4px 12px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   font-weight: bold;
   font-size: 20px;

@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import dynamic from "next/dynamic";
 import { Container } from "@mui/material";
 
 import Footer from "@/components/Layouts/Footer";
-
-const Header = dynamic(() => import("@/components/Layouts/Header"), {
-  ssr: false,
-});
+import Header from "@/components/Layouts/Header";
 
 import "./globals.css";
 
