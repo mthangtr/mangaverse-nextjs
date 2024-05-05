@@ -22,3 +22,15 @@ export function formatDate(date: Date | string) {
     day: "numeric",
   });
 }
+
+export function convertGsToHttps(gsUrl: string) {
+  const bucketRegex = /^gs:\/\/([^\/]+)\/(.+)$/;
+  const match = gsUrl.match(bucketRegex);
+  if (match) {
+    const bucketName = match[1];
+    const filePath = match[2].replace(/\//g, "%2F"); // Encoding the slashes
+    return `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${filePath}?alt=media`;
+  } else {
+    throw new Error("Invalid GS URL");
+  }
+}

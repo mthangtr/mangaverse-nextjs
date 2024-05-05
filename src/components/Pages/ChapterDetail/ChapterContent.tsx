@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Page } from "@/types/Global";
 import axios from "axios";
+import { convertGsToHttps } from "@/utils/format";
 
 async function getChapterContent({ chapterId }: { chapterId: number }) {
   const { data } = await axios.get(
@@ -17,15 +18,29 @@ export default function ChapterContent({ chapterId }: { chapterId: number }) {
 
   useEffect(() => {
     getChapterContent({ chapterId }).then((data) => {
-      setPageList(data);
+      setPageList(
+        data.map((page: Page) => ({
+          ...page,
+          imageUrl: convertGsToHttps(page.imageUrl),
+        }))
+      );
     });
   }, [chapterId]);
 
   return (
-    <div>
+    <div className="my-4">
       {pageList.map((page) => (
-        <div key={page.id} className="mt-4">
-          <Image src={page.imageUrl} alt="page" width={1000} height={1500} />
+        <div
+          key={page.id}
+          className="flex flex-col justify-center items-center"
+        >
+          <Image
+            src={page.imageUrl}
+            alt={`Page ${page.pageNumber}`}
+            width={1000}
+            height={1500}
+            layout="responsive"
+          />
         </div>
       ))}
     </div>
