@@ -18,12 +18,7 @@ export default function ChapterContent({ chapterId }: { chapterId: number }) {
 
   useEffect(() => {
     getChapterContent({ chapterId }).then((data) => {
-      setPageList(
-        data.map((page: Page) => ({
-          ...page,
-          imageUrl: convertGsToHttps(page.imageUrl),
-        }))
-      );
+      setPageList(data);
     });
   }, [chapterId]);
 
@@ -39,7 +34,7 @@ export default function ChapterContent({ chapterId }: { chapterId: number }) {
             alt={`Page ${page.pageNumber}`}
             width={1000}
             height={1500}
-            layout="responsive"
+            layout="intrinsic"
           />
         </div>
       ))}

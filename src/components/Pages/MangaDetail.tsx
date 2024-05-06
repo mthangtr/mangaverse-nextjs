@@ -16,6 +16,14 @@ import timeAgo from "@/utils/timeAgo";
 import { Button } from "@mui/material";
 import { useState, useEffect } from "react";
 
+async function getFirstChapter(mangaId: number) {
+  const { data } = await axios.get<Chapter>(
+    `http://localhost:8080/api/chapter/service/first-chapter/${mangaId}`
+  );
+
+  return data;
+}
+
 export default function MangaDetail({
   data,
   chaptersInit,
@@ -28,6 +36,7 @@ export default function MangaDetail({
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [chapters, setChapters] = useState<Chapter[]>([...chaptersInit]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [firstChapter, setFirstChapter] = useState<Chapter | null>(null);
 
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
@@ -71,6 +80,13 @@ export default function MangaDetail({
 
   useEffect(() => {
     fetchChapters(data.id, currentPage);
+    getFirstChapter(data.id)
+      .then((firstChapterData) => {
+        setFirstChapter(firstChapterData);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch first chapter:", error);
+      });
   }, [currentPage]);
 
   const handleShowMore = () => {
@@ -123,11 +139,15 @@ export default function MangaDetail({
             </div>
             <div>
               <Link
-                href={`/views/${encodeURIComponent(
-                  titleUrlFormat(data.title)
-                )}/${data.id}/${chapters[0].id}/${encodeURIComponent(
-                  titleUrlFormat(chapters[0].title)
-                )}`}
+                href={
+                  firstChapter
+                    ? `/views/${encodeURIComponent(
+                        titleUrlFormat(data.title)
+                      )}/${data.id}/${firstChapter.id}/${encodeURIComponent(
+                        titleUrlFormat(firstChapter.title)
+                      )}`
+                    : "#"
+                }
               >
                 <Button variant="outlined">Read first</Button>
               </Link>
